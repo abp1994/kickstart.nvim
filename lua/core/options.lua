@@ -39,3 +39,6 @@ vim.o.showmatch = true -- Highlight matching parentheses and brackets
 vim.o.autoindent = true --Enable automatic indentation
 vim.o.smartindent = true --Enable smart indentation
 vim.o.shiftround = false --Round indent to multiple of 'hiftwidth'
+vim.o.wrap = false -- Display lines as a long line.
+vim.o.termguicolors = true --Allow 24-bit colors in the terminal
+vim.opt.colorcolumn = '80' --make a coloured col at 80.

@@ -1,6 +1,6 @@
 return { -- Autoformat
   'stevearc/conform.nvim',
-  event = { 'BufWritePre', 'bufNewFile' },
+  event = { 'BufWritePre' },
   cmd = { 'ConformInfo' },
   keys = {
     {
@@ -23,25 +23,18 @@ return { -- Autoformat
         return nil
       else
         return {
-          timeout_ms = 500,
+          timeout_ms = 1000,
           lsp_format = 'fallback',
         }
       end
     end,
     formatters_by_ft = {
       lua = { 'stylua' },
-      python = { 'ruff_fix', 'ruff_format', 'ruff_organize_imports' },
+      -- Conform can also run multiple formatters sequentially
+      python = { 'isort', 'black' },
+      --
       -- You can use 'stop_after_first' to run the first available formatter from the list
-      javascript = { 'prettierd' },
-      typescript = { 'prettierd' },
-      vue = { 'prettierd' },
-      html = { 'prettierd' },
-      css = { 'prettierd' },
-      json = { 'prettierd' },
-      jsonc = { 'prettierd' },
-      yaml = { 'prettierd' },
-      go = { 'goimports', 'golines' },
-      markdown = { 'prettierd' },
+      -- javascript = { "prettierd", "prettier", stop_after_first = true },
     },
   },
 }

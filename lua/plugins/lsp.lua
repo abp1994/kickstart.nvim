@@ -272,6 +272,7 @@ return {
       'jsonlint',
       'yamllint',
       'eslint_d',
+      'nixfmt',
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 

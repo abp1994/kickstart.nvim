@@ -42,6 +42,7 @@ return { -- Autoformat
       yaml = { 'prettierd' },
       go = { 'goimports', 'golines' },
       markdown = { 'prettierd' },
+      nix = { 'nixfmt'}
     },
   },
 }

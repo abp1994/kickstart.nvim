@@ -21,19 +21,22 @@ rtp:prepend(lazypath)
 
 require('lazy').setup({
   'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
-  require 'plugins.neo-tree',
-  require 'plugins.autopairs',
-  require 'plugins.gitsigns',
-  require 'plugins.indent-blankline',
-  require 'plugins.alpha',
-  require 'plugins.autotag',
-  require 'plugins.colorizer',
-  require 'plugins.fugitive',
-  require 'plugins.rhubarb',
-  require 'plugins.lsp',
-  require 'plugins.conform',
-  require 'plugins.nvim-lint',
-  require 'plugins.render-markdown',
+  require 'plugins.neo-tree', -- File explorer panel / sidebar to browse the filesystem and tree‑like structures (files, folders)
+  require 'plugins.autopairs', -- Automatically insert matching closing characters (brackets, quotes, etc.) when you type an opening one
+  require 'plugins.gitsigns', -- Show Git change indicators in left gutter (added/modified/deleted lines etc.)
+  require 'plugins.indent-blankline', -- Display indentation guides (vertical lines) to show indent levels to make nested code more readable
+  require 'plugins.alpha', -- Start/dashboard screen plugin (welcome screen / greeter) when opening Neovim
+  require 'plugins.autotag', -- Automatically close and rename matching HTML/XML tags as you edit tag‑based markup
+  require 'plugins.colorizer', -- Highlight color codes in your files (e.g. `#ff0000` shows red)
+  require 'plugins.fugitive', -- Git wrapper for vim: powerful Git operations from within Neovim (diff, status, commit etc.)
+  require 'plugins.rhubarb', -- Extends fugitive: handles GitHub‑specific stuff, remote operations, etc.
+  require 'plugins.lsp', -- Language Server Protocol support: code intelligence, diagnostics, auto‑completion etc.
+  require 'plugins.conform', -- Code formatting plugin: enforce code style, auto‑format code according to rules
+  require 'plugins.nvim-lint', -- Linting: check code for errors, style issues etc. as you edit or on save
+  require 'plugins.render-markdown', -- Render markdown files nicely inside Neovim (e.g. previews, formatting)
+  require 'plugins.noice', -- Replace/augment Neovim’s UI for messages, command line, popup menus etc. with more modern / polished UI
+  require 'plugins.blink', -- High‑performance, batteries‑included completion plugin. supports LSP, snippets, fuzzy matching, cmdline & terminal completion, with sensible defaults.
+  require 'plugins.tokyonight', -- Colorscheme for nvim with support for LSP and other plugins.
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
   -- This is often very useful to both group configuration, as well as handle
@@ -208,127 +211,6 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sn', function()
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[S]earch [N]eovim files' })
-    end,
-  },
-
-  { -- Autocompletion
-    'saghen/blink.cmp',
-    event = 'VimEnter',
-    version = '1.*',
-    dependencies = {
-      -- Snippet Engine
-      {
-        'L3MON4D3/LuaSnip',
-        version = '2.*',
-        build = (function()
-          -- Build Step is needed for regex support in snippets.
-          -- This step is not supported in many windows environments.
-          -- Remove the below condition to re-enable on windows.
-          if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
-            return
-          end
-          return 'make install_jsregexp'
-        end)(),
-        dependencies = {
-          -- `friendly-snippets` contains a variety of premade snippets.
-          --    See the README about individual language/framework/plugin snippets:
-          --    https://github.com/rafamadriz/friendly-snippets
-          -- {
-          --   'rafamadriz/friendly-snippets',
-          --   config = function()
-          --     require('luasnip.loaders.from_vscode').lazy_load()
-          --   end,
-          -- },
-        },
-        opts = {},
-      },
-      'folke/lazydev.nvim',
-    },
-    --- @module 'blink.cmp'
-    --- @type blink.cmp.Config
-    opts = {
-      keymap = {
-        -- 'default' (recommended) for mappings similar to built-in completions
-        --   <c-y> to accept ([y]es) the completion.
-        --    This will auto-import if your LSP supports it.
-        --    This will expand snippets if the LSP sent a snippet.
-        -- 'super-tab' for tab to accept
-        -- 'enter' for enter to accept
-        -- 'none' for no mappings
-        --
-        -- For an understanding of why the 'default' preset is recommended,
-        -- you will need to read `:help ins-completion`
-        --
-        -- No, but seriously. Please read `:help ins-completion`, it is really good!
-        --
-        -- All presets have the following mappings:
-        -- <tab>/<s-tab>: move to right/left of your snippet expansion
-        -- <c-space>: Open menu or open docs if already open
-        -- <c-n>/<c-p> or <up>/<down>: Select next/previous item
-        -- <c-e>: Hide menu
-        -- <c-k>: Toggle signature help
-        --
-        -- See :h blink-cmp-config-keymap for defining your own keymap
-        preset = 'default',
-
-        -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
-        --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
-      },
-
-      appearance = {
-        -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
-        -- Adjusts spacing to ensure icons are aligned
-        nerd_font_variant = 'mono',
-      },
-
-      completion = {
-        -- By default, you may press `<c-space>` to show the documentation.
-        -- Optionally, set `auto_show = true` to show the documentation after a delay.
-        documentation = { auto_show = true, auto_show_delay_ms = 500 },
-      },
-
-      sources = {
-        default = { 'lsp', 'path', 'snippets', 'lazydev' },
-        providers = {
-          lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
-        },
-      },
-
-      snippets = { preset = 'luasnip' },
-
-      -- Blink.cmp includes an optional, recommended rust fuzzy matcher,
-      -- which automatically downloads a prebuilt binary when enabled.
-      --
-      -- By default, we use the Lua implementation instead, but you may enable
-      -- the rust implementation via `'prefer_rust_with_warning'`
-      --
-      -- See :h blink-cmp-config-fuzzy for more information
-      fuzzy = { implementation = 'lua' },
-
-      -- Shows a signature help window while you type arguments for a function
-      signature = { enabled = true },
-    },
-  },
-
-  { -- You can easily change to a different colorscheme.
-    -- Change the name of the colorscheme plugin below, and then
-    -- change the command in the config to whatever the name of that colorscheme is.
-    --
-    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'folke/tokyonight.nvim',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
-    config = function()
-      ---@diagnostic disable-next-line: missing-fields
-      require('tokyonight').setup {
-        styles = {
-          comments = { italic = false }, -- Disable italics in comments
-        },
-      }
-
-      -- Load the colorscheme here.
-      -- Like many other themes, this one has different styles, and you could load
-      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
     end,
   },
 
